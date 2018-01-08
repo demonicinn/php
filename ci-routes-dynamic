@@ -1,9 +1,22 @@
-require_once( BASEPATH .'database/DB.php');
+Database-driven Routing in CodeIgniter
+
+The Solution
+The whole technique consists just of a small MySQL table and a few lines of PHP code. How it works? The table holds our URL → Controller records whereas the code fetches them and lists array entries (like mentioned above) dynamically. It also makes sure that further URL levels are directed to the base controller (or folder).
+
+<?php
+$route[ 'default_controller' ]  = 'main';
+$route[ '404_override' ]        = 'error404';
+ 
+require_once( BASEPATH .'database/DB'. EXT );
 $db =& DB();
-$query = $db->get( 'upwork_url' );
+$query = $db->get( 'app_routes' );
 $result = $query->result();
-//echo '<pre>'; print_r($result );
 foreach( $result as $row )
 {
-    $route[ $row->url]                 = 'Jobbid/showJobs';
+    $route[ $row->slug ]                 = $row->controller;
+    $route[ $row->slug.'/:any' ]         = $row->controller;
+    $route[ $row->controller ]           = 'error404';
+    $route[ $row->controller.'/:any' ]   = 'error404';
 }
+?>
+Feel free to change the values of default_controller and 404_override to what you need or already have. That's it! Now you have a database-driven routing in CodeIgniter enabled!
