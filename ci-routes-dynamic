@@ -1,0 +1,9 @@
+require_once( BASEPATH .'database/DB.php');
+$db =& DB();
+$query = $db->get( 'upwork_url' );
+$result = $query->result();
+//echo '<pre>'; print_r($result );
+foreach( $result as $row )
+{
+    $route[ $row->url]                 = 'Jobbid/showJobs';
+}
