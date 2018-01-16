@@ -20,3 +20,13 @@ foreach( $result as $row )
 }
 ?>
 Feel free to change the values of default_controller and 404_override to what you need or already have. That's it! Now you have a database-driven routing in CodeIgniter enabled!
+
+
+	function test() {
+		try {
+			
+		}
+		catch (Throwable $e) {
+			echo $e->getMessage();
+		}
+	}
