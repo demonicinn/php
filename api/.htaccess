@@ -1,0 +1,8 @@
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+	
+	RewriteRule ^$ index.php?folder=home&page=index
+	RewriteRule ^blog$ index.php?folder=blog&page=index
+	
+	
+</IfModule>
