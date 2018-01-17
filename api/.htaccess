@@ -4,5 +4,9 @@
 	RewriteRule ^$ index.php?folder=home&page=index
 	RewriteRule ^blog$ index.php?folder=blog&page=index
 	
-	
+	#RewriteRule ^events/status/([^/]+)/([^/]+)$ index.php?page=site_action&role=admin&view=event&action=status&ids=$1&value=$2
+	#RewriteRule ^users/status/([^/]+)/([^/]+)$ index.php?page=site_action&role=admin&view=user&action=status&ids=$1&value=$2
+	#RewriteRule ^settings/sports/status/([^/]+)/([^/]+)$ index.php?page=site_action&role=admin&view=sport&action=status&ids=$1&value=$2
+	#RewriteRule ^settings/plans/status/([^/]+)/([^/]+)$ index.php?page=site_action&role=admin&view=plan&action=status&ids=$1&value=$2
+	#RewriteRule ^settings/teams/status/([^/]+)/([^/]+)$ index.php?page=site_action&role=admin&view=team&action=status&ids=$1&value=$2
 </IfModule>
