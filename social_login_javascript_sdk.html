@@ -1,0 +1,96 @@
+<script src="https://apis.google.com/js/api:client.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
+	
+<a href="javascript:void(0);" onclick="fbLogin();"><i class="fa fa-facebook"> </i> Login With Facebook</a>								
+<a href="javascript:void(0);" id="customBtn"><i class="fa fa-google"> </i> Login With Google</a>
+
+<form id="socialForm" action="" method="post">
+</form>
+
+<div id="fb-root"></div>
+<script>
+	jQuery('#socialForm').hide();
+	var form$ = $("#socialForm");
+
+	window.fbAsyncInit = function() {
+		FB.init({
+			appId: '<fb-app-id>',
+			autoLogAppEvents : false,
+			cookie: true,
+      xfbml: true,
+      version: 'v2.12'
+		});
+	};
+	
+	// Load the SDK asynchronously
+	(function(d, s, id){
+		var js, fjs = d.getElementsByTagName(s)[0];
+		if (d.getElementById(id)) {return;}
+		js = d.createElement(s); js.id = id;
+		js.src = "https://connect.facebook.net/en_US/sdk.js";
+		fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));
+	
+	function fbLogin() {
+		FB.login(function(response) {
+			fbAPI();			
+		}, {scope: 'email,public_profile'});            
+	}
+	
+	function fbAPI() {
+    FB.api('/me?fields=id,first_name,last_name,email,gender,picture', function(res) {
+      console.log(res);
+			form$.append('\
+			<input type="hidden" name="oauth_provider" value="facebook">\
+			<input type="hidden" name="oauth_uid" value="'+res.id+'">\
+			<input type="hidden" name="fname" value="'+res.first_name+'">\
+			<input type="hidden" name="lname" value="'+res.last_name+'">\
+			<input type="hidden" name="emails" value="'+res.email+'">\
+			<input type="hidden" name="image" value="'+res.picture.data.url+'">\
+			<input type="hidden" name="gender" value="'+res.gender+'">\
+			');
+			jQuery(form$).submit();
+		});
+	}
+	
+	var uri = 'ab'; //condition for login and registration page difference
+	uri = (uri=='registration')?'select_account':'';
+	//google----------
+	var googleUser = {};
+	var startApp = function() {
+		gapi.load('auth2', function(){
+			// Retrieve the singleton for the GoogleAuth library and set up the client.
+			auth2 = gapi.auth2.init({
+				client_id: '<client-id>.apps.googleusercontent.com',
+				cookiepolicy: 'single_host_origin',
+				scope: 'profile email',
+				prompt:uri
+				// Request scopes in addition to 'profile' and 'email'
+				//scope: 'additional_scope'
+			});
+			attachSignin(document.getElementById('customBtn'));
+		});
+	};
+	
+	function attachSignin(element) {
+		//console.log(element.id);
+		auth2.attachClickHandler(element, {},
+		function(googleUser) {
+			var res = googleUser.getBasicProfile();
+			//console.log(res);
+			form$.append('\
+			<input type="hidden" name="oauth_provider" value="google">\
+			<input type="hidden" name="oauth_uid" value="'+res.getId()+'">\
+			<input type="hidden" name="fname" value="'+res.getName()+'">\
+			<input type="hidden" name="lname" value="'+res.getGivenName()+'">\
+			<input type="hidden" name="emails" value="'+res.getEmail()+'">\
+			<input type="hidden" name="image" value="'+res.getImageUrl()+'">\
+			<input type="hidden" name="gender" value="">\
+			');
+			jQuery(form$).submit();
+			}, function(error) {
+			//alert(JSON.stringify(error, undefined, 2));
+		});
+	}
+	startApp();	
+</script>
